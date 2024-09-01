@@ -57,6 +57,43 @@ class Solution:
                             return edges, self.edgeTable[i][destination] + neededWeight
         
         return [],0
+    
+    
+    # helper_no_neg takes a list of edges and returns a pair (List[edges], neededWeight) with edges = (s, e, weight)
+    # the different between helper_no_neg and helper is that helper does not eliminate negative weight but
+    # helper_no_neg ignores negative weights.
+    def helper_no_neg(self, source: int, destination: int, prev_nodes: List[int]):
+        edges = []
+        connected_nodes = []
+        print(source)
+        for i in range(self.n):
+            if self.edgeTable[destination][i] != 0:            
+                connected_nodes.append(i)
+        # print(connected_nodes)
+        # print(prev_nodes)
+
+
+        for i in connected_nodes:
+            if prev_nodes != None and (i not in prev_nodes):
+                if self.edgeTable[source][i] > self.target:
+                    continue
+                if self.edgeTable[i][destination] < 0:
+                    continue
+                if i == source:
+                    if self.edgeTable[i][destination] < self.target and self.edgeTable[i][destination] > 0:
+                        edges.append([i,destination, self.edgeTable[i][destination]])
+                        # print("return:source ", source, " destination: ", destination, " result: ",  edges, self.edgeTable[i][destination])
+                        return edges, self.edgeTable[i][destination]
+                else:
+                    prev_nodes.append(destination)
+                    prev_edges, neededWeight = self.helper_no_neg(source, i, prev_nodes)
+                    if self.edgeTable[i][destination] + neededWeight < self.target:    
+                        prev_edges.append([i, destination, self.edgeTable[i][destination]])
+                        edges = prev_edges
+                        # print("return:source ", source, " destination: ", destination, " result: ",  edges, self.edgeTable[i][destination] + neededWeight)
+                        return edges, self.edgeTable[i][destination] + neededWeight
+        
+        return [],0
                 
     def modifiedGraphEdges(self, n: int, edges: List[List[int]], source: int, destination: int, target: int) -> List[List[int]]:
         
@@ -71,7 +108,17 @@ class Solution:
         
         # print(self.edgeTable)
         
+        
+        #without using negative edges, if we are able to get from source to destination with a weight < target, then no solution
+        helper_edges2, neededWeight2 = self.helper_no_neg(source, destination, [])
+        print(helper_edges2, neededWeight2)
+
+        if neededWeight2 > 0 and neededWeight2 < target:
+            return []
+        
+        
         helper_edges, neededWeight = self.helper(source, destination, [])
+
 
         # print(helper_edges)
         # print(neededWeight)
@@ -120,4 +167,5 @@ s=Solution()
 # print(s.modifiedGraphEdges(5,[[4,1,-1],[2,0,-1],[0,3,-1],[4,3,-1]], 0, 1,5))
 # print(s.modifiedGraphEdges(3,[[0,1,-1],[0,2,5]], 0, 2,6))
 # print(s.modifiedGraphEdges(4,[[1,0,4],[1,2,3],[2,3,5],[0,3,-1]], 0, 2,6))
-print(s.modifiedGraphEdges(4, [[0,1,-1],[1,2,-1],[3,1,-1],[3,0,2],[0,2,5]], 2, 3, 8))
+# print(s.modifiedGraphEdges(4, [[0,1,-1],[1,2,-1],[3,1,-1],[3,0,2],[0,2,5]], 2, 3, 8))
+print(s.modifiedGraphEdges(5, [[0,1,-1],[2,1,-1],[2,4,8],[3,4,10]], 0, 2, 9))
