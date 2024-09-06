@@ -36,12 +36,22 @@ class Solution:
         # print("helper", source, destination)
         # print(connected_nodes)
         # print(prev_nodes)
+        
+        # min_weight is to ensure that the edges __helper__ returns is indeed the lowest in terms of weight
         min_idx = -1
         min_weight = 99999
+        
+        # min_length is to ensure that the edges __helper__ returns is the shortest in terms of
+        # number of edges
+        min_length_id = -1
+        min_length = 9999
 
+        possible_edges = []
+        possible_weights = []
+        
         for i in connected_nodes:
             if i not in prev_nodes:
-                print("helper: i as prev_node is ", i)
+                # print("helper: i as prev_node is ", i)
                 if self.edgeTable[i][destination] > self.target:
                     # print("weight from ", source, " to destination ", i , " is", self.edgeTable[source][i], " bigger than self.target = ", self.target)
                     continue
@@ -57,14 +67,19 @@ class Solution:
                             if self.edgeTable[i][destination] + neededWeight < self.target:
                                 prev_edges.append([i, destination, self.edgeTable[i][destination]])
                                 edges = prev_edges
-                                # print("return:source ", source, " destination: ", destination, " result: ",  edges, self.edgeTable[i][destination] + neededWeight)
-                                return edges, self.edgeTable[i][destination] + neededWeight
+                                possible_edges.append(edges)
+                                possible_weights.append(self.edgeTable[i][destination] + neededWeight)
+                                if(len(edges) < min_length):
+                                    # if it's indeed the shortest in terms of number of edges 
+                                    min_length_id = len(possible_edges) - 1
         
         # print("min_idx = ", min_idx)
         if min_idx != -1:
             return [[min_idx, destination, min_weight]], min_weight
-        
-        return [],0
+        if min_length_id != -1:
+            return possible_edges[min_length_id], possible_weights[min_length_id]
+        else:
+            return [],0
     
     
     # helper_no_neg takes a list of edges and returns a pair (List[edges], neededWeight) with edges = (s, e, weight)
@@ -219,4 +234,5 @@ s=Solution()
 # print(s.modifiedGraphEdges(4,[[1,0,4],[1,2,3],[2,3,5],[0,3,-1]], 0, 2,6))
 # print(s.modifiedGraphEdges(5,[[3,0,-1],[2,1,-1],[4,1,9],[3,4,-1],[4,0,6],[2,3,5],[4,2,8],[3,1,7],[1,0,6],[0,2,9]], 4, 1, 10))
 # print(s.modifiedGraphEdges(5,[[1,4,-1],[0,2,-1],[0,3,9],[4,0,-1],[1,0,10],[4,2,10]], 1, 2, 9))
-print(s.modifiedGraphEdges(4, [[3,0,-1],[1,3,-1],[3,2,10],[0,2,2]], 0, 1, 13))
+# print(s.modifiedGraphEdges(4, [[3,0,-1],[1,3,-1],[3,2,10],[0,2,2]], 0, 1, 13))
+print(s.modifiedGraphEdges(5,[[3,0,1],[2,1,-1],[2,3,6],[4,2,6],[1,3,2],[2,0,7],[0,4,10],[0,1,6]],1,4,14))
