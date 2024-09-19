@@ -2,14 +2,18 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <deque>
+#include <utility>
 #include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
-    std::vector<int> getDigits(int number) {
+
+    // retMapped contains mapped value, in non-descending order. should be populated while getting mapped values.
+    vector<pair<int,int>> mappedVar;
+
+    vector<int> getDigits(int number) {
         std::vector<int> digits;
 
         // Special case for zero
@@ -17,11 +21,6 @@ public:
             digits.push_back(0);
             return digits;
         }
-
-        // Ensure the number is positive
-        //if (number < 0) {
-        //    number = -number;
-        //}
 
         // Find the highest divisor
         int divisor = 1;
@@ -40,23 +39,15 @@ public:
         return digits;
     }
 
-    long long composeNumber(std::vector<int>& digits) {
+    long long composeNumber(vector<int>& digits) {
         long long number = 0;
 
         for (int digit : digits) {
-            // Validate that each element is a single digit between 0 and 9
-            //if (digit < 0 || digit > 9) {
-            //    throw std::invalid_argument("All elements must be digits between 0 and 9.");
-            //}
-
             // Update the number by shifting existing digits left and adding the new digit
             number = number * 10 + digit;
         }
-
         return number;
     }
-
-    map<int , deque<int>> mappingToNum;
 
     vector<int> sortJumbled(vector<int>& mapping, vector<int>& nums) {
 
@@ -66,35 +57,24 @@ public:
         if (nums.size() == 1)
            return nums;
 
-        vector<int> arrayToSort;
         vector<int> ret;
 
         for (int i = 0; i < nums.size(); ++i) {
+            int mappedKey;
             vector <int> VecNum = getDigits(nums[i]);
             vector <int> convNum;
 
             for (int j = 0; j < VecNum.size(); ++j)
                 convNum.push_back(mapping[VecNum[j]]);
 
-            int mappedKey = composeNumber(convNum);
-            mappingToNum[mappedKey].push_back(nums[i]);
+            mappedKey = composeNumber(convNum);
+            mappedVar.push_back(pair(mappedKey, i));
         }
 
-        for (const auto& entry : mappingToNum) {
-            arrayToSort.push_back(entry.first);
-        }
+        std::sort(mappedVar.begin(), mappedVar.end());
 
-        std::sort(arrayToSort.begin(), arrayToSort.end());
-
-        //cout << "arrayToSort has " << arrayToSort.size() << " elements" << endl;
-
-        for (auto num : arrayToSort) {
-            auto queue = mappingToNum[num];
-            //cout << "size of queue is " << queue.size() << endl;
-            for (int i = 0; i < queue.size(); ++i) {
-                ret.push_back(mappingToNum[num][i]);
-                //queue.pop_front();
-            }
+        for (auto onePair : mappedVar) {
+            ret.push_back(nums[onePair.second]);
         }
 
         return ret;
