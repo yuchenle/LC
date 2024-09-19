@@ -10,7 +10,6 @@ using namespace std;
 class Solution {
 public:
 
-    // retMapped contains mapped value, in non-descending order. should be populated while getting mapped values.
     vector<pair<int,int>> mappedVar;
 
     vector<int> getDigits(int number) {
@@ -51,6 +50,8 @@ public:
 
     vector<int> sortJumbled(vector<int>& mapping, vector<int>& nums) {
 
+        mappedVar.reserve(nums.size());
+
         if (mapping.size() != 10)
            return vector<int>();
 
@@ -62,12 +63,12 @@ public:
         for (int i = 0; i < nums.size(); ++i) {
             int mappedKey;
             string strNum = std::to_string(nums[i]);
-            vector <int> convNum;
+            string mappedNum = "";
 
             for (int j = 0; j < strNum.size(); ++j)
-                convNum.push_back(mapping[strNum[j] - 48]); //48 because ascii(0) = 48
+                mappedNum += char(48 + mapping[strNum[j] - 48]); //48 because ascii(0) = 48
 
-            mappedKey = composeNumber(convNum);
+            mappedKey = std::stoi(mappedNum);
             mappedVar.push_back(pair(mappedKey, i));
         }
 
