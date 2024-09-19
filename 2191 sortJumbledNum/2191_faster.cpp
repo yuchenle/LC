@@ -61,11 +61,11 @@ public:
 
         for (int i = 0; i < nums.size(); ++i) {
             int mappedKey;
-            vector <int> VecNum = getDigits(nums[i]);
+            string strNum = std::to_string(nums[i]);
             vector <int> convNum;
 
-            for (int j = 0; j < VecNum.size(); ++j)
-                convNum.push_back(mapping[VecNum[j]]);
+            for (int j = 0; j < strNum.size(); ++j)
+                convNum.push_back(mapping[strNum[j] - 48]); //48 because ascii(0) = 48
 
             mappedKey = composeNumber(convNum);
             mappedVar.push_back(pair(mappedKey, i));
