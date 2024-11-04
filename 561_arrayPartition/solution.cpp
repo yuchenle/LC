@@ -15,8 +15,11 @@ public:
 
         std::sort(nums.begin(), nums.end());
 
+        int ret = 0;
         for (int i = 0; i < length; ++i) {
-            
+            if (i%2==0)
+                ret += nums[i];
         }
+        return ret;
     }
 };
