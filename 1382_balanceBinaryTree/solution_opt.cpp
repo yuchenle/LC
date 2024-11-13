@@ -90,12 +90,12 @@ public:
         }
 
 
-        printf("printing the balanced tree\n");
-        vector<TreeNode *> arrayNodes2 = getVals(ret);
-        for (auto node : arrayNodes2) {
-            printf("%d ", node->val);
-        }
-        printf("\n");
+        // printf("printing the balanced tree\n");
+        // vector<TreeNode *> arrayNodes2 = getVals(ret);
+        // for (auto node : arrayNodes2) {
+        //     printf("%d ", node->val);
+        // }
+        // printf("\n");
         return ret;
     }
 
@@ -120,16 +120,29 @@ public:
     bool isBalanced(TreeNode* r) {
         if (r==nullptr)
             return true;
-        bool ret;
-        int hleft = height(r->left);
-        int hright = height(r->right);
-        if (abs(hleft-hright) > 1)
-            ret = false;
-        else
-            ret = true;
-        ret &= isBalanced(r->left);
-        ret &= isBalanced(r->right);
-        return ret;
+        if (r->left == nullptr) {
+            if (r->right == nullptr) {
+                return true;
+            } else {
+                int hright = height(r->right);
+                if (hright>=2)
+                    return false;
+            }
+        }
+
+        if (r->right == nullptr) {
+            if (r->left == nullptr) {
+                return true;
+            } else {
+                int hleft = height(r->left);
+                if (hleft>=2)
+                    return false;
+            }
+        }
+
+        bool retL = isBalanced(r->left);
+        bool retR = isBalanced(r->right);
+        return retL&&retR;
     }
 
     int height(TreeNode* node) {
