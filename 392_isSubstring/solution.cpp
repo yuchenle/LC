@@ -17,7 +17,15 @@ public:
     bool isSubsequence(string s, string t) {
         int length1 = s.size();
         int length2 = t.size();
-        int DP[length1][length2] = {0};
+
+        if (length1==0)
+            return true;
+        if (length2==0)
+            return false;
+
+        int **DP = (int **)malloc(sizeof(int *) * length1);
+        for (int i = 0; i < length1; ++i)
+            DP[i] = (int *)calloc(sizeof(int), length2);
 
 
         for (int i = 0; i < length1; ++i)
