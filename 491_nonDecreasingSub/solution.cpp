@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <set>
 
 using namespace std;
 
@@ -23,7 +24,8 @@ public:
 
     vector<vector<int>> findSubsequences(vector<int>& nums) {
         int length = nums.size();
-        vector<vector<int>> ret;
+        set<vector<int>> ret;
+        vector<vector<int>> rr;
         for (int i = 0; i < 1<<length; ++i) {
             vector<int> subV;
             for (int j = 0; j < length; ++j) {
@@ -34,17 +36,21 @@ public:
             // for (auto elem : subV)
             //     printf("%d ", elem);
             // printf("\n");
-            if (isNonDecreasing(subV) && std::find(ret.begin(), ret.end(), subV) == ret.end())
-              ret.push_back(subV);
+            if (isNonDecreasing(subV))
+              ret.insert(subV);
         }
-        return ret;
+        for (auto arr : ret)
+            rr.push_back(arr);
+
+        return rr;
     }
 };
 
 int main() {
     Solution s = Solution();
     vector<int> input = {4,6,7,7};
-    auto arr = s.findSubsequences(input);
+    vector<int> input2 = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+    auto arr = s.findSubsequences(input2);
     printf("there are %zu results\n", arr.size());
     for (auto vec : arr) {
         for (auto elem : vec) {
