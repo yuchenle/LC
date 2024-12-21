@@ -16,7 +16,7 @@ public:
         for (int i = 0; i < list2.size(); ++i)
             str2[list2[i]] = i;
 
-        printf("size of map1 is %zu, map2.size is %zu\n", str1.size(), str2.size());
+        // printf("size of map1 is %zu, map2.size is %zu\n", str1.size(), str2.size());
 
         int minn = 999999;
         vector<string> ret;
