@@ -29,6 +29,7 @@ public:
                         ret.push_back({i,j});
                     }
                 } else {
+                    // without this break, the execution time goes from 0 ms to 100ish ms.
                     break;
                 }
             }
